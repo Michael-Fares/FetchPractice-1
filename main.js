@@ -5,11 +5,25 @@ window.onload = function() {
   getPosts()
 }
 
+
+// this function will be passed in as the "checker" function in the first .then method. Will return results if request successful, otherwise will throw an error.
+const checkFetch = (res) => {
+    // error handling included 
+    if(!res.ok) {
+      throw Error(res.statusText)
+    } 
+    console.log('okay')
+    return res.json()
+  }
+
+
 // This function is going to make a fetch request to the URL inside its parameter brackets (). Then it will turn the response (data it's getting back), saved here as res. The res.json will not be saved as posts and saved into the variable, arrayOfPosts
 const getPosts = () => {
   fetch('http://jsonplaceholder.typicode.com/posts')
-    .then(res => res.json())
-    .then(posts => arrayOfPosts = posts)
+  .then(checkFetch)
+  .then(posts => arrayOfPosts = posts)
+  // error handling "catcher" - this needs to be there even error throwing function is in another variable
+  .catch(err => console.log(`Error,  ${err}`))
 }
 
 // This function logs the results in your browser's console
